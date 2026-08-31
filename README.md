@@ -230,18 +230,40 @@ Churn_client/
 ├── .gitignore
 ├── README.md
 ├── requirements.txt
-└── LICENSE
 
- 🚀 Perspectives
 
-Ce projet peut être amélioré par :
+🚀 Application Streamlit
 
-* l'ajustement du seuil de classification ;
-* l'utilisation d'autres algorithmes de Machine Learning ;
-* l'optimisation plus approfondie des hyperparamètres ;
-* l'utilisation de méthodes d'interprétabilité comme SHAP ;
-* la création d'un tableau de bord interactif avec Power BI ;
-* le déploiement du modèle sous forme d'application.
+
+Afin de rendre le modèle de Machine Learning utilisable de manière interactive, deux applications Streamlit ont été développées.
+
+📊 Cas 1 — Avec SatisfactionScore
+
+Cette application utilise le modèle entraîné avec la variable SatisfactionScore.
+
+Elle permet à l'utilisateur de :
+
+saisir les caractéristiques d'un client ;
+appliquer automatiquement le prétraitement nécessaire ;
+effectuer une prédiction du churn ;
+afficher le résultat de la prédiction ;
+identifier le risque de départ du client.
+📊 Cas 2 — Sans SatisfactionScore
+
+Une deuxième application a été développée sans utiliser la variable SatisfactionScore.
+
+Elle permet également de :
+
+saisir les caractéristiques d'un client ;
+appliquer le même processus de prétraitement ;
+effectuer une prédiction ;
+afficher le résultat obtenu par le modèle.
+
+Cette deuxième version permet notamment de comparer les prédictions avec et sans la variable SatisfactionScore.
+
+🎯 Objectif du déploiement
+
+Le développement de ces deux applications permet de transformer les modèles de Machine Learning en un outil interactif et facilement utilisable, tout en permettant de comparer les deux configurations du projet.
 
  👩‍💻 Auteur
 
