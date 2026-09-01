@@ -5,6 +5,7 @@ Application Streamlit de prédiction du churn
 avec un modèle de Gradient Boosting.
 """
 
+from pathlib import Path
 import pickle
 import joblib
 import pandas as pd
@@ -23,12 +24,27 @@ st.set_page_config(
 )
 
 
+# ================================================================
+# CHEMINS DES FICHIERS
+# ================================================================
+
+# Dossier contenant app.py
+APP_DIR = Path(__file__).resolve().parent
+
+# Racine du projet Churn_client/
+PROJECT_DIR = APP_DIR.parent.parent
+
+# Dossier contenant les modèles avec SatisfactionScore
+MODEL_DIR = PROJECT_DIR / "models" / "avec_satisfaction"
+
+
 MODEL_FILES = {
-    "model": "gradient_boosting_churn.pkl",
-    "scaler": "scaler.pkl",
-    "frequency_encodings": "frequency_encodings.pkl",
-    "model_information": "model_information.pkl"
+    "model": MODEL_DIR / "gradient_boosting_churn.pkl",
+    "scaler": MODEL_DIR / "scaler.pkl",
+    "frequency_encodings": MODEL_DIR / "frequency_encodings.pkl",
+    "model_information": MODEL_DIR / "model_information.pkl"
 }
+
 
 YES_NO = ["Yes", "No"]
 NO_YES = ["No", "Yes"]
@@ -208,24 +224,55 @@ st.markdown(
 @st.cache_resource
 def load_model():
 
+    # Vérification de l'existence des fichiers
+    missing_files = [
+        str(path)
+        for path in MODEL_FILES.values()
+        if not path.exists()
+    ]
+
+    if missing_files:
+        raise FileNotFoundError(
+            "Les fichiers suivants sont introuvables :\n"
+            + "\n".join(missing_files)
+        )
+
+    # ------------------------------------------------------------
+    # Modèle
+    # ------------------------------------------------------------
+
     model = joblib.load(
         MODEL_FILES["model"]
     )
+
+    # ------------------------------------------------------------
+    # Scaler
+    # ------------------------------------------------------------
 
     scaler = joblib.load(
         MODEL_FILES["scaler"]
     )
 
+    # ------------------------------------------------------------
+    # Frequency Encoding
+    # ------------------------------------------------------------
+
     with open(
         MODEL_FILES["frequency_encodings"],
         "rb"
     ) as f:
+
         frequency_encodings = pickle.load(f)
+
+    # ------------------------------------------------------------
+    # Informations du modèle
+    # ------------------------------------------------------------
 
     with open(
         MODEL_FILES["model_information"],
         "rb"
     ) as f:
+
         model_information = pickle.load(f)
 
     return (
@@ -257,12 +304,22 @@ except Exception as e:
 
     st.write(
         "Vérifiez que les quatre fichiers du modèle "
-        "sont présents dans le même dossier que "
-        "l'application."
+        "sont présents dans le dossier :"
     )
 
     st.code(
-        "\n".join(MODEL_FILES.values())
+        str(MODEL_DIR)
+    )
+
+    st.write(
+        "Fichiers recherchés :"
+    )
+
+    st.code(
+        "\n".join(
+            str(path)
+            for path in MODEL_FILES.values()
+        )
     )
 
     st.exception(e)
