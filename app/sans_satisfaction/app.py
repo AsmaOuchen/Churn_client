@@ -2,7 +2,8 @@
 Telco Customer Churn
 ====================
 Application Streamlit de prédiction du churn
-avec un modèle de Gradient Boosting.
+avec un modèle de Gradient Boosting
+sans SatisfactionScore.
 """
 
 from pathlib import Path
@@ -34,8 +35,8 @@ APP_DIR = Path(__file__).resolve().parent
 # Racine du projet Churn_client
 PROJECT_DIR = APP_DIR.parent.parent
 
-# Dossier des modèles avec SatisfactionScore
-MODEL_DIR = PROJECT_DIR / "models" / "avec_satisfaction"
+# Dossier du modèle SANS SatisfactionScore
+MODEL_DIR = PROJECT_DIR / "models" / "sans_satisfaction"
 
 
 MODEL_FILES = {
@@ -144,7 +145,7 @@ st.markdown(
 
     /* ============================================================
        BOUTONS
-       ================================================================ */
+       ============================================================ */
 
     .stButton > button {
         background-color: #ff7900 !important;
@@ -224,7 +225,7 @@ st.markdown(
 @st.cache_resource
 def load_model():
 
-    # Vérification des fichiers
+    # Vérification de l'existence des fichiers
     missing_files = [
         str(path)
         for path in MODEL_FILES.values()
@@ -303,7 +304,7 @@ except Exception as e:
     )
 
     st.write(
-        "Les fichiers du modèle doivent être présents dans :"
+        "Les quatre fichiers du modèle doivent être présents dans :"
     )
 
     st.code(
@@ -366,6 +367,12 @@ with st.sidebar:
 
     st.info(
         "Gradient Boosting"
+    )
+
+    st.subheader("Configuration")
+
+    st.info(
+        "Sans SatisfactionScore"
     )
 
     st.subheader("Variables")
@@ -737,13 +744,6 @@ with tab_usage:
 
     with col3:
 
-        satisfaction = st.slider(
-            "Score de satisfaction",
-            min_value=1,
-            max_value=5,
-            value=3
-        )
-
         cltv = st.number_input(
             "CLTV",
             min_value=1000,
@@ -797,7 +797,6 @@ client_data = {
     "TotalExtraDataCharges": total_extra_data,
     "TotalLongDistanceCharges": total_long_distance,
     "TotalRevenue": total_revenue,
-    "SatisfactionScore": satisfaction,
     "CLTV": cltv
 }
 
@@ -1046,5 +1045,5 @@ st.divider()
 
 st.caption(
     "Telco Customer Churn Prediction • "
-    "Gradient Boosting • Machine Learning"
+    "Gradient Boosting • Sans SatisfactionScore • Machine Learning"
 )
